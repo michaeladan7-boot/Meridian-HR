@@ -1,0 +1,1094 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #ffffff;
+  --bg-alt: #f6faf4;
+  --ink: #16241a;
+  --ink-soft: #4d5c50;
+  --border: #d3d5d3;
+
+  --green: #49ec17;
+  --green-dark: #28511c;
+  --green-light: #eaf3e5;
+  --accent: #e2963a;
+  --accent-dark: #b8721e;
+
+  --font-head: 'Sora', 'Segoe UI', sans-serif;
+  --font-body: 'Inter', 'Segoe UI', sans-serif;
+
+  --radius: 14px;
+  --section-pad: clamp(4rem, 8vw, 7rem);
+  --max: 1180px;
+}
+
+/* Base typography — nothing set this before, so text was silently
+   falling back to browser defaults everywhere. */
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-head);
+  line-height: 1.2;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* .wrap was previously an empty rule — used as the content wrapper
+   in every section but doing nothing. This is what actually makes
+   --max useful and keeps content centered and readable at any width. */
+.wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 25px);
+}
+
+/* Small uppercase label — used above a heading throughout the site. */
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-dark);
+}
+
+header {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-text {
+  font-family: var(--font-head);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.logo-text .accent {
+  color: var(--green-dark);
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 15px 25px;
+  gap: 10px;
+}
+
+.nav-links {
+  padding: 10px;
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-size: 1rem;
+  color: black;
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--green-dark);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.nav-links a:hover::after {
+  transform: scaleX(1);
+}
+
+/* ── Services dropdown ──
+   Groups HR Consulting / HR BPO / Capacity Building under one nav
+   item instead of three separate top-level links — the header was
+   getting crowded with six+ items plus the CTA button. */
+.nav-dropdown {
+  position: relative;
+}
+
+.dropdown-toggle {
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: black;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 0 4px;
+}
+
+.dropdown-toggle .caret {
+  font-size: 0.7em;
+  transition: transform 0.2s ease;
+}
+
+.nav-dropdown.open .dropdown-toggle .caret {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  min-width: 220px;
+  padding: 10px;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 120;
+}
+
+.nav-dropdown.open .dropdown-menu {
+  display: flex;
+}
+
+.dropdown-menu a {
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.dropdown-menu a::after {
+  display: none;
+}
+
+.dropdown-menu a:hover {
+  background: var(--green-light);
+}
+
+/* ── Hamburger toggle (mobile) — hidden on desktop ── */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 200;
+}
+
+.nav-toggle span {
+  width: 100%;
+  height: 2px;
+  background: var(--ink);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.nav-toggle.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 150;
+}
+
+.nav-overlay.open {
+  display: block;
+}
+
+/* ==========================================================================
+   SCROLL FADE-IN ANIMATION HOOKS
+   ========================================================================== */
+.scroll-fade {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
+}
+
+/* Triggered safely when element hits the visible scroll viewport window */
+.scroll-fade.appear {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scroll-fade {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+}
+
+
+/* Renamed from the duplicate "hero-actions" that was also used for the
+   two hero CTA buttons — same class, two unrelated jobs, easy to
+   misread as one thing. Now each wrapper has its own name. */
+.header-actions {
+  display: flex;
+  align-items: center;
+}
+
+.btn-explore {
+  width: 150px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  background-color: rgb(161, 255, 20);
+  border-radius: 30px;
+  color: rgb(19, 19, 19);
+  font-weight: 600;
+  border: none;
+  position: relative;
+  cursor: pointer;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.116);
+  padding-left: 8px;
+  transition-duration: .5s;
+  text-decoration: none;
+}
+
+.btn-explore .svgIcon {
+  height: 25px;
+  transition-duration: 1.5s;
+}
+
+.btn-explore .bell path {
+  fill: rgb(19, 19, 19);
+}
+
+.btn-explore:hover {
+  background-color: rgb(192, 255, 20);
+  transition-duration: .5s;
+}
+
+.btn-explore:active {
+  transform: scale(0.97);
+  transition-duration: .2s;
+}
+
+.btn-explore:hover .svgIcon {
+  transform: rotate(250deg);
+  transition-duration: 1.5s;
+}
+
+/* ================================
+   HERO
+   ================================ */
+.hero {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.75)),
+    url(images/successful-businesswoman-manages-financial-planning-project-development.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  padding: 2rem 3rem 3rem 2rem;
+}
+
+.hero .wrap {
+  margin-left: 0;
+  max-width: none;
+}
+
+/* .wrap {
+  width: 100%;
+  max-width: var(--max);
+  /* 1180px */
+  margin: 0 auto;
+  /* ← this centers .wrap on wide screens */
+  padding: 0 clamp(20px, 4vw, 25px);
+/* }  */ 
+ 
+.hero-copy {
+  padding: 10px 0px;
+  max-width: 1000px;
+  margin-left: 0;
+}
+
+.hero-copy .eyebrow {
+  font-size: 1rem;
+  border: 1px solid var(--accent-dark);
+  width: fit-content;
+  border-radius: 10px;
+  padding: 5px 10px;
+  text-align: center;
+  margin-top: 3rem;
+  color: rgba(243, 243, 243, 0.887);
+  box-shadow: 0 0 5px var(--accent-dark);
+  text-shadow: none;
+}
+
+.hero-copy h1 {
+  font-size: clamp(32px, 6vw,73px);
+  max-width: 70%;
+  color: rgba(255, 255, 255, 0.953);
+  line-height: 1;
+  margin-top: 0.5rem;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+  margin-bottom: 1rem;
+}
+
+.hero-copy h2 {
+  font-size: clamp(18px, 3vw, 32px);
+  max-width: 90%;
+  color: rgba(255, 255, 255, 0.809);
+  line-height: 1.3;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.hero p {
+  color: rgba(255, 255, 255, 0.747);
+  max-width: min(600px, 90%);
+  font-family: var(--font-body);
+  margin-bottom: 1rem;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+}
+
+.hero-actions {
+  padding: 5px;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hero-actions .btn {
+  font-size: 1rem;
+  text-decoration: none;
+  color: rgb(63, 63, 63);
+  font-family: var(--font-body);
+}
+
+.hero-actions .btn-outline{
+  color: rgb(131, 131, 131);
+}
+
+.btn {
+  width: auto;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background-color: rgb(161, 255, 20);
+  border-radius: 30px;
+  color: rgb(19, 19, 19);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.116);
+  padding: 10px 22px;
+  transition-duration: .5s;
+  text-decoration: none;
+}
+
+.btn:hover {
+  box-shadow: 0 0 5px rgb(192, 255, 20);
+  color: black;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: none;
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+  color: #fff;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+/* ================================
+   SHARED CARD + GRID SYSTEM
+   Used by: why, services-teaser, service-section, spark-section
+   auto-fit/minmax reflows the column count based on available space —
+   no breakpoints needed.
+   ================================ */
+.grid {
+  display: grid;
+  gap: clamp(1rem, 3vw, 1.75rem);
+}
+
+.grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.grid-4 {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.grid-pillars {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.card {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 0 0 1px var(--green), 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+  cursor: pointer;
+}
+
+.card h3,
+.card h4 {
+  margin-top: 0.5rem;
+  color: var(--ink);
+}
+
+.card p {
+  margin-top: 0.75rem;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.card .num {
+  font-weight: 700;
+  font-size: 2rem;
+  color: var(--green-dark);
+}
+
+.card-2 {
+  background-color: rgb(139, 208, 37);
+  border-color: var(--green);
+}
+
+.card-2 .num,
+.card-2 h3,
+.card-2 p {
+  color: var(--ink);
+}
+
+.learn-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--green-dark);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.learn-link:hover {
+  text-decoration: underline;
+}
+
+/* ===============
+service-header
+=============== */
+.service-hero{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.service-hero h2{
+  font-size: clamp(32px, 7vw, 100px);
+  max-width: 90%;
+  /* color: rgba(64, 221, 21, 0.953); */
+  line-height: 1.1;
+  margin-top: 0.5rem;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.Consulting-hero{
+   background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.75)),
+    url(images/business-meeting-office.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.BPO-hero{
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.75)),
+    url(images/woman-having-online-meeting-work.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+} 
+
+.Capacity-hero{
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.75)),
+    url(images/medium-shot-people-working-together.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* ================================
+   WHY / SERVICES / SERVICES-TEASER
+   (three sections share this same look — combined into one rule
+   set instead of repeating the same declarations twice)
+   ================================ */
+.why,
+.services,
+.services-teaser {
+  width: 100%;
+  padding: var(--section-pad) 0;
+  text-align: center;
+}
+
+.why .eyebrow,
+.services .eyebrow,
+.services-teaser .eyebrow {
+  margin-bottom: 0.5rem;
+}
+
+.why h2,
+.services h2,
+.services-teaser h2 {
+  font-size: clamp(28px, 4vw, 44px);
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.why .card,
+.services .card,
+.services-teaser .card {
+  text-align: left;
+}
+
+.service-image img {
+  min-height: 200px;
+  width: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+  transition: all 0.3s ease-in;
+}
+
+/* ================================
+   SERVICE SECTIONS (Consulting / BPO / Capacity Building)
+   ================================ */
+.service-section {
+  width: 100%;
+  padding: var(--section-pad) 0;
+}
+
+.service-section:nth-of-type(even) {
+  background: var(--bg-alt);
+}
+
+.section-head {
+  max-width: 680px;
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+.section-head h1 {
+  font-size: clamp(28px, 4vw, 44px);
+  color: var(--ink);
+  margin: 0.75rem 0 1rem;
+}
+
+.section-head p {
+  color: var(--ink-soft);
+}
+
+.pillar-card {
+  text-align: left;
+}
+
+/* ================================
+   SPARK / FRESH GRADUATES
+   ================================ */
+.spark-section {
+  width: 100%;
+  padding: var(--section-pad) 0;
+  background: var(--green-light);
+}
+
+.spark-section>.wrap>.eyebrow {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.spark-section>.wrap>h1 {
+  font-size: clamp(28px, 4vw, 44px);
+  margin-bottom: 1rem;
+  max-width: 700px;
+}
+
+.spark-section>.wrap>p {
+  color: var(--ink-soft);
+  max-width: 640px;
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+.spark-section .card {
+  /* background: var(--bg); */
+  text-align: left;
+}
+
+.spark-cta {
+  margin-top: clamp(2rem, 5vw, 3rem);
+  background: var(--ink);
+  border-radius: var(--radius);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.spark-cta h3 {
+  color: #fff;
+}
+
+.spark-cta p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.5rem;
+  max-width: 420px;
+}
+
+.card-color{
+  
+}
+
+/* ================================
+   ABOUT
+   ================================ */
+.about-section {
+  width: 100%;
+  padding: var(--section-pad) 0;
+}
+
+.about-section h1 {
+  font-size: clamp(28px, 4vw, 44px);
+  margin: 0.75rem 0 1rem;
+}
+
+.about-section .eyebrow {
+  margin-bottom: 0.25rem;
+}
+
+.about-section p {
+  color: var(--ink-soft);
+  margin-bottom: 1rem;
+}
+
+.values-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.values-list li {
+  padding-left: 1.25rem;
+  border-left: 3px solid var(--green);
+}
+
+.values-list h4 {
+  margin-bottom: 0.35rem;
+  color: var(--ink);
+}
+
+.values-list p {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+/* ================================
+   CONTACT
+   ================================ */
+.contact-section {
+  width: 100%;
+  padding: var(--section-pad) 0;
+  background: var(--bg-alt);
+}
+
+.contact-section h1 {
+  font-size: clamp(28px, 4vw, 44px);
+  margin: 0.75rem 0 1rem;
+}
+
+.contact-section>.wrap>div:first-child>p {
+  color: var(--ink-soft);
+  margin-bottom: 2rem;
+}
+
+.contact-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.contact-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.contact-list .icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.contact-list h4 {
+  color: var(--ink);
+  margin-bottom: 0.15rem;
+}
+
+.contact-list p {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.contact-form {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contact-form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-top: 0.75rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--ink);
+  resize: vertical;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--green-dark);
+}
+
+.contact-form button {
+  margin-top: 1.5rem;
+}
+
+.contact-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-message {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  min-height: 1.2em;
+}
+
+.form-message.success {
+  color: var(--green-dark);
+}
+
+.form-message.error {
+  color: #b3261e;
+}
+
+/* Honeypot field — invisible to real visitors, catches spam bots */
+.hidden-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ================================
+   FOOTER
+   ================================ */
+.site-footer {
+  width: 100%;
+  background: var(--ink);
+  color: rgba(255, 255, 255, 0.75);
+  padding: clamp(3rem, 6vw, 4rem) 0 1.5rem;
+}
+
+.site-footer .grid-4 {
+  margin-bottom: 2.5rem;
+}
+
+.foot-logo {
+  font-family: var(--font-head);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+.foot-logo span {
+  color: var(--green);
+}
+
+.site-footer p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.site-footer h4 {
+  color: #fff;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 1rem;
+}
+
+.site-footer a {
+  display: block;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 0.6rem;
+  transition: color 0.2s ease;
+}
+
+.site-footer a:hover {
+  color: var(--green);
+}
+
+.foot-bottom {
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ================================================================
+   RESPONSIVE
+   Breakpoints: 1024px (tablet), 900px (nav switches to hamburger),
+   768px (small tablet / large phone), 480px (phone)
+   ================================================================ */
+
+@media (max-width: 1024px) {
+  .hero-copy h1 {
+    max-width: 100%;
+  }
+
+  .hero-copy h2,
+  .hero p {
+    max-width: 100%;
+  }
+
+  .contact-form {
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero {
+    background-attachment: scroll;
+  }
+
+  .nav {
+    padding: 15px 20px;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: min(80vw, 320px);
+    height: 100vh;
+    background: var(--bg);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding: 100px 28px 40px;
+    box-shadow: -8px 0 24px rgba(0, 0, 0, 0.08);
+    transition: right 0.35s ease;
+    z-index: 180;
+    overflow-y: auto;
+  }
+
+  .nav-links.open {
+    right: 0;
+  }
+
+  .nav-links a {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 1.05rem;
+  }
+
+  /* Inside the mobile panel the dropdown should sit inline, not float */
+  .nav-dropdown {
+    width: 100%;
+  }
+
+  .dropdown-toggle {
+    width: 100%;
+    justify-content: space-between;
+    padding: 12px 0;
+    font-size: 1.05rem;
+  }
+
+  .dropdown-menu {
+    position: static;
+    transform: none;
+    display: none;
+    box-shadow: none;
+    border: none;
+    border-left: 2px solid var(--green-light);
+    border-radius: 0;
+    margin-left: 8px;
+    padding: 4px 0 4px 12px;
+    min-width: 0;
+  }
+
+  .nav-dropdown.open .dropdown-menu {
+    display: flex;
+  }
+
+  .header-actions .btn-explore {
+    width: auto;
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-copy {
+    padding: 15px 20px;
+  }
+
+  .hero-copy .eyebrow {
+    margin-top: 2rem;
+  }
+
+  .service-hero {
+    height: 60vh;
+    min-height: 320px;
+  }
+
+  .about-section .wrap.grid-2,
+  .contact-section .wrap.grid-2 {
+    gap: 2.5rem;
+  }
+
+  .spark-cta {
+    text-align: left;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-copy h1 {
+    font-size: clamp(28px, 8vw, 40px);
+  }
+
+  .hero{
+    text-align: center;
+  }
+
+  .btn,
+  .btn-outline {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .spark-cta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .spark-cta .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .site-footer .grid-4 {
+    text-align: left;
+  }
+}
