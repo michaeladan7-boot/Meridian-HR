@@ -76,12 +76,16 @@ header {
   z-index: 100;
 }
 
+.logo{
+  text-decoration: none;
+  display: inline-block;
+}
+
 .logo-text {
   font-family: var(--font-head);
   font-size: 1.3rem;
   font-weight: 700;
   color: var(--ink);
-  text-decoration: none;
   white-space: nowrap;
 }
 
